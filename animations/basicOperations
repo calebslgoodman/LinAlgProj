@@ -1,0 +1,9 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #starting from linalgproj lets this folder find matrixOperations
+from matrixOperations.renameFunctions import dot, cross, inverse, det, rank, np
+
+n1 = np.array([1, 3])
+n2 = np.array([2,-2])
+
+print(dot(n1, n2))
