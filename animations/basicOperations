@@ -2,8 +2,66 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) #starting from linalgproj lets this folder find matrixOperations
 from matrixOperations.renameFunctions import dot, cross, inverse, det, rank, np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
-n1 = np.array([1, 3])
-n2 = np.array([2,-2])
+transformedMatrix = np.array([[12,-2],[-1,5]])
 
-print(dot(n1, n2))
+iMatrix = np.array([[0,0],[1,0],[1,1],[0,1],[0,0]])
+
+def moveMatrix(t, A):
+    return (1 - t) * np.eye(A.shape[0]) + t * A
+
+# by changing t over time, which is a lot like what you do with diffeq, 
+# you move from the identity matrix to the new matrix in an animation. 
+#follows (1-x) and x, both to 1.
+
+'''
+learning how to use matplotlib was interesting.
+i made this over the course of about a week, and i'll keep making more functions.
+i anticipate that it'll be much easier and quicker, knowing how to use the functions.
+all the functions (from setting axes to learning quiver to the transform function) had different synatxes, but they were all easily grapsed
+trying to make it better and better, visually, was a challenge. i'm gonna eventually allow inputs.
+'''
+
+fig, ax = plt.subplots()
+#ax.set_xlim(-2,2)
+#ax.set_ylim(-2,2)
+ax.set_aspect('equal') #no weird scaling
+ax.grid(True) #gridlines
+
+quiver = ax.quiver([], [], [], [], angles='xy', scale_units='xy', scale=1)
+#this function was uncooperative, but it inputs 4 values, angle coords (xy not uv), scale coords, and scale factor
+
+line = ax.plot([], [], 'r-', linewidth=1)[0] #insertdata for line index 0 (lol)
+fill = ax.fill([], [], 'green', alpha=0.2)[0] #same thing
+
+#create the plot
+def init(): 
+    line.set_data([],[]) #create a line pleaceholder
+    fill.set_xy(np.empty((0,2))) #updates where the green filler goes during transformation. this is a tuple. don't forget that. 0r2col
+
+    return line, fill
+
+#create the movement
+def transform(i): #funcAnimation comes with i, so it doesn't have to be instantiated. its fps
+    t = i / 100 #100fps
+    middleMatrix = moveMatrix(t, transformedMatrix) #constantly updated according from t to final matrix (args)
+    transformed = (middleMatrix @ iMatrix.T).T #baseMatrix (represented by points) is transposed. @ preformed matrix mult, updating matrix position, so we then transpose back
+    line.set_data(transformed[:, 0], transformed[:, 1]) #update line to column 1,2 on transformed. this step updates the plot
+    if t == 1:  # fill only at the end
+        fill.set_xy(transformed)
+    else:
+        fill.set_xy(np.empty((0, 2)))
+
+    ax.set_xlim(1.2*transformed[:, 0].min(), 1.2*transformed[:, 0].max()) #this stuff adjusts the axes according to the input
+    ax.set_ylim(1.2*transformed[:, 1].min(), 1.2*transformed[:, 1].max()) #but now it won't work until i press a button on the output
+    return line, fill
+
+
+# Create animation
+ani = FuncAnimation(fig, transform, frames=101, init_func=init, blit=True, interval=31, repeat=False)
+
+# Show the plot
+plt.show()
+
