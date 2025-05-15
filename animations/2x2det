@@ -55,7 +55,7 @@ def transform(i): #funcAnimation comes with i, so it doesn't have to be instanti
         fill.set_xy(np.empty((0, 2)))
 
     ax.set_xlim(1.2*transformed[:, 0].min(), 1.2*transformed[:, 0].max()) #this stuff adjusts the axes according to the input
-    ax.set_ylim(1.2*transformed[:, 1].min(), 1.2*transformed[:, 1].max()) #but now it won't work until i press a button on the output
+    ax.set_ylim(1.2*transformed[:, 1].min(), 1.2*transformed[:, 1].max()) #but now it won't work until i press a button on the output (?!)
     return line, fill
 
 
