@@ -2,7 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-A = np.array([[0.5, -3], [-2, 1]]) #this is what the unit vectors will transform into i --> 0.5, -2   j --> -3, 1
+
+print("Enter a 2x2 matrix A row-by-row, separated by spaces (e.g. '3 1' then '2 4'):")
+row1 = list(map(float, input("Row 1: ").split()))
+row2 = list(map(float, input("Row 2: ").split()))
+A = np.array([row1, row2])
+
 iHat = np.array([1,0])
 jHat = np.array([0,1])
 
@@ -15,10 +20,11 @@ vertical_lines = []
 
 fig, ax = plt.subplots() #stop forgetting this
 ax.set_aspect('equal')
-ax.grid(False)
+ax.grid(True)
 
-ax.set_xlim(-3, 3)
-ax.set_ylim(-3, 3)
+limit = np.max(np.abs(A))
+ax.set_xlim(-limit, limit)
+ax.set_ylim(-limit, limit)
 
 
 quiver_i = ax.quiver(0,0,1,0, angles='xy', scale_units='xy', scale=1, color='red', label='î')

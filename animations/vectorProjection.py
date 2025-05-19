@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-A = np.array([2,3])
-B = np.array([4,1])
+print("Enter two distinct vectors, separated by spaces (e.g. '3 1' then '2 4'):")
+A = np.array(list(map(float, input("Row 1: ").split())))
+B = np.array(list(map(float, input("Row 2: ").split())))
 
 mag_a = np.linalg.norm(A)
 mag_b = np.linalg.norm(B)
@@ -22,8 +23,10 @@ proj_vector = np.dot(A,B) / (mag_b ** 2) * B
 fig, ax = plt.subplots()
 ax.set_aspect('equal')
 ax.grid(True)
-ax.set_xlim(0,5)
-ax.set_ylim(0,5)
+
+limit = np.max(np.abs(np.concatenate((A, B))))
+ax.set_xlim(-limit,limit)
+ax.set_ylim(-limit,limit)
 
 line1 = ax.quiver(0,0,A[0],A[1], angles='xy', scale_units='xy', scale=1, color='red')
 line2 = ax.quiver(0,0,B[0],B[1], angles='xy', scale_units='xy', scale=1, color='orange')

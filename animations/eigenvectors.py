@@ -6,7 +6,11 @@ from matplotlib.animation import FuncAnimation
 
 #when you watch this, take a look at how the unit vectors are rotated off their axis but the eigenvectors are not
 
-A = np.array([[3,1], [2,4]])
+print("Enter a 2x2 matrix A row-by-row, separated by spaces (e.g. '3 1' then '2 4'):")
+row1 = list(map(float, input("Row 1: ").split()))
+row2 = list(map(float, input("Row 2: ").split()))
+A = np.array([row1, row2])
+
 
 i_hat = np.array([1,0])
 j_hat = np.array([0,1])
@@ -20,13 +24,16 @@ it took me forever to realize where my scaling was going wrong, and it's because
 with magnitude 1, rather than the [1,2] and the [1,-1] that i expected. actually, it's even worse because it was going in the entire wrong direction
 but that doesn't necessarily matter because any vector on the same line as the 'eigenvector' is itself an eigenvector.
 attempting to scale the axes later is going to be horrible, it's been giving me sm trouble as of now. 
-'''
+'''  
 
 fig, ax = plt.subplots()
 ax.set_aspect('equal')
 ax.grid(True)
-ax.set_xlim(-5,5)
-ax.set_ylim(-5,5)
+
+limit = np.max(np.abs(A))  # max absolute value of any input
+
+ax.set_xlim(-limit, limit)
+ax.set_ylim(-limit, limit)
 
 i_quiver = ax.quiver(0,0,1,0, angles='xy', scale_units='xy', scale=1, color='red')
 j_quiver = ax.quiver(0,0,0,1, angles='xy', scale_units='xy', scale=1, color='red')
